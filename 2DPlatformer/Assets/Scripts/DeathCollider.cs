@@ -18,6 +18,13 @@ public class DeathCollider : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Destroy(collision.gameObject);
-        Debug.Log("game over");
+        if (collision.CompareTag("Player"))
+        {
+            Debug.Log("player1 has died");
+        }
+        else if (collision.CompareTag("Player2"))
+        {
+            Debug.Log("player2 has died");
+        }
     }
 }
