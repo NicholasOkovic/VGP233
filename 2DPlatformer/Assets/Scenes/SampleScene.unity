@@ -1068,8 +1068,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26706329f69d88044b4ab99820d7279d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 4
-  _crouchSpeed: 1
+  _moveSpeed: 2.5
+  _crouchSpeed: 0
   _jumpForce: 300
 --- !u!1 &392615788
 GameObject:
@@ -1661,8 +1661,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32730ad5fdf647e46ad6d2c90d5c2bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 4
-  _crouchSpeed: 1
+  _moveSpeed: 2.5
+  _crouchSpeed: 0
   _jumpForce: 300
 --- !u!1 &1133932016
 GameObject:
