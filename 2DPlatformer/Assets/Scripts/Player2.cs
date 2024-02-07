@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player2 : MonoBehaviour
 {
     [SerializeField] float _moveSpeed;
     [SerializeField] float _crouchSpeed;
@@ -16,56 +16,47 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float horizontalMove = Input.GetAxisRaw("HorizontalArrow") * Time.deltaTime;
+        float horizontalMove = Input.GetAxisRaw("HorizontalAD") * Time.deltaTime;
 
         if (_crouched)
             transform.Translate(horizontalMove * _crouchSpeed, 0, 0);
         else
             transform.Translate(horizontalMove * _moveSpeed, 0, 0);
 
-        if (Input.GetKey(KeyCode.DownArrow) && _grounded)
+        if (Input.GetKey(KeyCode.S) && _grounded)
         {
+
             Debug.Log("crounching");
-            if(!_crouched)
-            _crouched = true;
+            if (!_crouched)
+                _crouched = true;
         }
-        if (Input.GetKeyUp(KeyCode.DownArrow))
+        else if (Input.GetKeyUp(KeyCode.S) && _grounded)
         {
             Debug.Log("no longer crounching");
             _crouched = false;
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow) && _grounded)
+        if (Input.GetKeyDown(KeyCode.W) && _grounded)
         {
-            if(_crouched)
-                rb.AddForce(new Vector2(0, _jumpForce*2));
+            if (_crouched)
+            {
+                rb.AddForce(new Vector2(0, _jumpForce * 2));
+                Debug.Log("no longer crounching");
+            }
             else
                 rb.AddForce(new Vector2(0, _jumpForce));
         }
-        //else if (Input.GetKeyDown(KeyCode.Space) && _grounded)
-        //{
-        //    rb.AddForce(new Vector2(0, _jumpForce));
-        //   // _grounded = false;
-        //}
+
 
 
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("do somehting special for p1");
+            Debug.Log("do somehting special for p2");
         }
-
-
     }
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.transform.tag == "Platforms")
-    //    {
-    //        _grounded = true;
-    //    }
-    //}
+ 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Platforms")
