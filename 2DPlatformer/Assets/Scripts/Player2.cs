@@ -10,24 +10,40 @@ public class Player2 : MonoBehaviour
     private bool _grounded = false;
     private bool _crouched = false;
     private Rigidbody2D rb;
+    private Animator animator;
+    private SpriteRenderer sprite;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
-        float horizontalMove = Input.GetAxisRaw("HorizontalAD") * Time.deltaTime;
+        float horizontalMove = Input.GetAxisRaw("HorizontalAD");
+
+        animator.SetInteger("runSpeed", (int)horizontalMove);
 
         if (_crouched)
-            transform.Translate(horizontalMove * _crouchSpeed, 0, 0);
+            transform.Translate(horizontalMove * _crouchSpeed * Time.deltaTime, 0, 0);
         else
-            transform.Translate(horizontalMove * _moveSpeed, 0, 0);
+            transform.Translate(horizontalMove * _moveSpeed * Time.deltaTime, 0, 0);
+
+        //animation
+        if (horizontalMove < 0)
+        {
+            sprite.flipX = true;
+        }
+        else if (horizontalMove > 0)
+        {
+            sprite.flipX = false;
+        }
+
 
         if (Input.GetKey(KeyCode.S) && _grounded)
         {
-
             Debug.Log("crounching");
             if (!_crouched)
                 _crouched = true;
