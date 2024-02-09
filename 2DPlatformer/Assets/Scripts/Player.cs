@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,10 +8,12 @@ public class Player : MonoBehaviour
     [SerializeField] float _moveSpeed;
     [SerializeField] float _crouchSpeed;
     [SerializeField] float _jumpForce;
-    private bool _grounded = false;
+    //private bool _grounded = false;
     private Animator animator;
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
+    private float _timer;
+    [SerializeField] private float _cooldown;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -21,12 +24,17 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(_timer > 0)
+        {
+            _timer -= Time.deltaTime;
+        }
         //movement
         float horizontalMove = Input.GetAxisRaw("HorizontalArrow") ;
 
         animator.SetInteger("runSpeed", (int)horizontalMove);
-        //animator.SetBool("crouched", _crouched);
         
+
+
         if (animator.GetBool("crouched"))
             transform.Translate(horizontalMove * _crouchSpeed * Time.deltaTime, 0, 0);
         else
@@ -45,7 +53,7 @@ public class Player : MonoBehaviour
 
 
         //abilities(inc jump)
-        if (Input.GetKey(KeyCode.DownArrow) && _grounded)
+        if (Input.GetKey(KeyCode.DownArrow) && animator.GetBool("grounded"))
         {
             Debug.Log("crounching");
             if(!animator.GetBool("crouched"))
@@ -56,7 +64,7 @@ public class Player : MonoBehaviour
             Debug.Log("no longer crounching");
             animator.SetBool("crouched", false);
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow) && _grounded)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && animator.GetBool("grounded"))
         {
             if(animator.GetBool("crouched"))
                 rb.AddForce(new Vector2(0, _jumpForce*2));
@@ -64,9 +72,14 @@ public class Player : MonoBehaviour
                 rb.AddForce(new Vector2(0, _jumpForce));
         }
       
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && _timer <= 0)
         {
             Debug.Log("do somehting special for p1");
+            _timer = _cooldown;
+            transform.localScale = new Vector3(1, transform.localScale.y * -1, 1);
+            _jumpForce *= -1;
+            //sprite.flipY = !sprite.flipY;
+            rb.gravityScale *= -1;
         }
     }
    
@@ -74,14 +87,14 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Platforms")
         {
-            _grounded = true;
+            animator.SetBool("grounded", true); 
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Platforms")
         {
-            _grounded = false;
+            animator.SetBool("grounded", false);
             animator.SetBool("crouched", false);
         }
     }
