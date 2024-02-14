@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Platforms
   - Player2
+  - TrapPlatform
+  - GameManager
   layers:
   - Default
   - TransparentFX
@@ -13,10 +15,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Gem
+  - TrapPlatforms
+  - Player
+  - Player2
   - 
   - 
   - 

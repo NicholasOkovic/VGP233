@@ -7,13 +7,13 @@ public class Player : MonoBehaviour
 {
     [SerializeField] float _moveSpeed;
     [SerializeField] float _crouchSpeed;
-    [SerializeField] float _jumpForce;
+    public static float _jumpForce = 400;
     //private bool _grounded = false;
     private Animator animator;
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
-    private float _timer;
-    [SerializeField] private float _cooldown;
+    //private float _timer;
+    //[SerializeField] private float _cooldown;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -24,13 +24,14 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_timer > 0)
-        {
-            _timer -= Time.deltaTime;
-        }
+        //if(_timer > 0)
+        //{
+        //    _timer -= Time.deltaTime;
+        //}
         //movement
         float horizontalMove = Input.GetAxisRaw("HorizontalArrow") ;
 
+        
         animator.SetInteger("runSpeed", (int)horizontalMove);
         
 
@@ -67,32 +68,32 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow) && animator.GetBool("grounded"))
         {
             if(animator.GetBool("crouched"))
-                rb.AddForce(new Vector2(0, _jumpForce*2));
+                rb.AddForce(new Vector2(0, _jumpForce*1.4f));
             else
                 rb.AddForce(new Vector2(0, _jumpForce));
         }
       
-        if (Input.GetKeyDown(KeyCode.Space) && _timer <= 0)
-        {
-            Debug.Log("do somehting special for p1");
-            _timer = _cooldown;
-            transform.localScale = new Vector3(1, transform.localScale.y * -1, 1);
-            _jumpForce *= -1;
-            //sprite.flipY = !sprite.flipY;
-            rb.gravityScale *= -1;
-        }
+        //if (Input.GetKeyDown(KeyCode.Space) && _timer <= 0)
+        //{
+        //    Debug.Log("do somehting special for p1");
+        //    _timer = _cooldown;
+        //    transform.localScale = new Vector3(1, transform.localScale.y * -1, 1);
+        //    _jumpForce *= -1;
+        //    //sprite.flipY = !sprite.flipY;
+        //    rb.gravityScale *= -1;
+        //}
     }
    
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Platforms")
+        if (collision.gameObject.CompareTag("Platforms") || collision.gameObject.tag == "TrapPlatform")
         {
             animator.SetBool("grounded", true); 
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Platforms")
+        if (collision.gameObject.tag == "Platforms" || collision.gameObject.tag == "TrapPlatform")
         {
             animator.SetBool("grounded", false);
             animator.SetBool("crouched", false);

@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Player2 : MonoBehaviour
 {
     [SerializeField] float _moveSpeed;
-    [SerializeField] float _crouchSpeed;
-    [SerializeField] float _jumpForce;
-    private bool _grounded = false;
-    private bool _crouched = false;
-    private Rigidbody2D rb;
+    public static float _jumpForce = 400;
+    //private bool _grounded = false;
     private Animator animator;
+    private Rigidbody2D rb;
     private SpriteRenderer sprite;
-    // Start is called before the first frame update
+    private float _timer;
+    [SerializeField] private float _cooldown;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -20,16 +20,22 @@ public class Player2 : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
     }
 
+    // Update is called once per frame
     void Update()
     {
-        float horizontalMove = Input.GetAxisRaw("HorizontalAD");
+        //if (_timer > 0)
+        //{
+        //    _timer -= Time.deltaTime;
+        //}
+        //movement
+        float horizontalMove = Input.GetAxisRaw("Horizontal");
+
+       
 
         animator.SetInteger("runSpeed", (int)horizontalMove);
 
-        if (_crouched)
-            transform.Translate(horizontalMove * _crouchSpeed * Time.deltaTime, 0, 0);
-        else
-            transform.Translate(horizontalMove * _moveSpeed * Time.deltaTime, 0, 0);
+
+        transform.Translate(horizontalMove * _moveSpeed * Time.deltaTime, 0, 0);
 
         //animation
         if (horizontalMove < 0)
@@ -42,50 +48,37 @@ public class Player2 : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.S) && _grounded)
+
+        //abilities(inc jump)
+
+        if (Input.GetKeyDown(KeyCode.W) && animator.GetBool("grounded"))
         {
-            Debug.Log("crounching");
-            if (!_crouched)
-                _crouched = true;
-        }
-        else if (Input.GetKeyUp(KeyCode.S) && _grounded)
-        {
-            Debug.Log("no longer crounching");
-            _crouched = false;
-        }
-        if (Input.GetKeyDown(KeyCode.W) && _grounded)
-        {
-            if (_crouched)
-            {
-                rb.AddForce(new Vector2(0, _jumpForce * 2));
-                Debug.Log("no longer crounching");
-            }
-            else
-                rb.AddForce(new Vector2(0, _jumpForce));
+            rb.AddForce(new Vector2(0, _jumpForce));
         }
 
-
-
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("do somehting special for p2");
-        }
+        //if (Input.GetKeyDown(KeyCode.Space) && _timer <= 0)
+        //{
+        //    Debug.Log("do somehting special for p1");
+        //    _timer = _cooldown;
+        //    transform.localScale = new Vector3(1, transform.localScale.y * -1, 1);
+        //    _jumpForce *= -1;
+  
+        //    rb.gravityScale *= -1;
+        //}
     }
- 
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Platforms")
+        if (collision.gameObject.tag == "Platforms" || collision.gameObject.tag == "Player" )
         {
-            _grounded = true;
+            animator.SetBool("grounded", true);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Platforms")
+        if (collision.gameObject.tag == "Platforms" || collision.gameObject.tag == "Player")
         {
-            _grounded = false;
-            _crouched = false;
+            animator.SetBool("grounded", false);
         }
     }
 }
