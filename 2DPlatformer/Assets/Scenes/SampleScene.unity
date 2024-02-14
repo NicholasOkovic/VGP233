@@ -104973,7 +104973,7 @@ MonoBehaviour:
   _playerOne: {fileID: 827645686}
   _playerTwo: {fileID: 158785535}
   _cooldown: 1
-  lastCheakPointPos: {x: 161.33, y: 0}
+  lastCheakPointPos: {x: 0, y: 0}
 --- !u!1001 &1506837246
 PrefabInstance:
   m_ObjectHideFlags: 0
