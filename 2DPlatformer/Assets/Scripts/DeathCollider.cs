@@ -38,6 +38,7 @@ public class DeathCollider : MonoBehaviour
         if (collision.CompareTag("Player") || collision.CompareTag("Player2"))
         {
             //teleport players
+            
             _playerOne.transform.position = gameManager.lastCheakPointPos;
             _playerTwo.transform.position = gameManager.lastCheakPointPos;
 
