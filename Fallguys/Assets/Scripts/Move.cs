@@ -50,7 +50,7 @@ public class Move : MonoBehaviour
 
       
         float targetAngle = Mathf.Atan2(moveInput.x, moveInput.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-        float Angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+        //float Angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
         Vector3 moveDire = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
 
@@ -64,12 +64,6 @@ public class Move : MonoBehaviour
             rb.AddForce(new Vector3(0, JumpSpeed, 0));
             _timer = _cooldown;
         }
-
-
-
-
-
-
 
     }
 
