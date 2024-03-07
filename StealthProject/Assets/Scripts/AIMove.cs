@@ -14,7 +14,7 @@ public class AIMove : MonoBehaviour
     private AIState currentState;
 
     private Transform playerFound;
-    private Transform heardPos;
+    private Vector3 heardPos;
 
     [SerializeField] private LensFlare lensFlare;
     [SerializeField] private Light _light;
@@ -58,14 +58,16 @@ public class AIMove : MonoBehaviour
 
             if (distanceToPlayer >= enemyStopDistance) //must be larger than detection box
             {
-                ResetToPatrol();
+                currentState = AIState.Patrol;
+                lensFlare.color = _baseLightColor;
+                _light.color = _baseLightColor;
             }
         }
         else if (currentState == AIState.Heard)
         {
-            agent.SetDestination(heardPos.position);
-            float distanceToSound = Vector3.Distance(heardPos.position, transform.position);
-            Debug.Log(distanceToSound);
+            agent.SetDestination(heardPos);
+            float distanceToSound = Vector3.Distance(heardPos, transform.position);
+            //Debug.Log(distanceToSound);
             if (distanceToSound <= 1.0f) 
             {
                 Invoke(nameof(ResetToPatrol), 1.25f);
@@ -82,21 +84,27 @@ public class AIMove : MonoBehaviour
         _light.color = Color.red;
             
     }
-    public void HeardSomething(Transform soundPos)
+    public void HeardSomething(Vector3 soundPos)
     {
-        heardPos = soundPos;
-        currentState = AIState.Heard;
-        lensFlare.color = Color.magenta;
-        _light.color = Color.magenta;
+        if (currentState != AIState.Chase)
+        {
+            heardPos = soundPos;
+            Debug.Log(soundPos);
+            currentState = AIState.Heard;
+            lensFlare.color = Color.magenta;
+            _light.color = Color.magenta;
+        }
     }
 
     public void ResetToPatrol()
     {
-        currentState = AIState.Patrol;
-        lensFlare.color = _baseLightColor;
-        _light.color = _baseLightColor;
+        if (currentState != AIState.Chase)
+        {
+            currentState = AIState.Patrol;
+            lensFlare.color = _baseLightColor;
+            _light.color = _baseLightColor;
+        }
     }
-
 
 }
 

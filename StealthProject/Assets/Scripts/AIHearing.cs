@@ -26,7 +26,7 @@ public class AIHearing : MonoBehaviour
             
             Debug.DrawLine(aiMove.transform.position, hit.point, Color.magenta, 2);
             
-            aiMove.HeardSomething(other.transform);
+            aiMove.HeardSomething(other.transform.position);
            
         }
 

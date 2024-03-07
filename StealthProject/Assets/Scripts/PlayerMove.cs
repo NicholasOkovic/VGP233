@@ -6,6 +6,9 @@ public class PlayerMove : MonoBehaviour
 {
     [SerializeField] private float MovementSpeed;
 
+    [SerializeField] private float throwSpeed;
+    [SerializeField] private float throwHeight;
+
     [SerializeField] private Transform orientation;
 
     [SerializeField] private float groundDrag;
@@ -14,6 +17,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     bool grounded;
 
+    [SerializeField] private Light playerFLight;
+    [SerializeField] private GameObject _rockPrefab;
+    [SerializeField] private Transform _rockThrowPos;
 
     float xMovement = 0;
     float zMovement = 0;
@@ -22,6 +28,7 @@ public class PlayerMove : MonoBehaviour
     //[SerializeField] private float _cooldown = 0.5f;
 
     Vector3 moveDirection;
+    Vector3 throwDirection;
 
     private Rigidbody rb;
 
@@ -48,8 +55,6 @@ public class PlayerMove : MonoBehaviour
 
        
 
-        //Vector3 moveInput = new Vector3(xMovement, 0, zMovement).normalized;
-        //rb.MovePosition(transform.position + (moveInput.normalized * Time.fixedDeltaTime * MovementSpeed));
 
 
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -69,6 +74,25 @@ public class PlayerMove : MonoBehaviour
         else
         {
             rb.drag = 0;
+        }
+        //inputs
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            playerFLight.enabled = !playerFLight.enabled;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Debug.Log("throw rock");
+            
+            GameObject rock = Instantiate(_rockPrefab, new Vector3(_rockThrowPos.position.x, _rockThrowPos.position.y, _rockThrowPos.position.z), Quaternion.identity);
+            //Rigidbody rockRB = rock.GetComponent<Rigidbody>();
+
+           
+
+            throwDirection = orientation.forward;
+            rock.GetComponent<Rigidbody>().AddForce(throwDirection.x * throwSpeed * 10, throwHeight, throwDirection.z * throwSpeed * 10, ForceMode.Force);
         }
      
     }
