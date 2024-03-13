@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class AIMove : MonoBehaviour
 {
     private NavMeshAgent agent;
-    [SerializeField] private Transform destinationPoint;
+    //[SerializeField] private Transform destinationPoint;
     [SerializeField] private Transform[] wayPoints;
     [SerializeField] private float enemyStopDistance = 10;
     private int currentIndex = 0;
@@ -15,6 +15,8 @@ public class AIMove : MonoBehaviour
 
     private Transform playerFound;
     private Vector3 heardPos;
+
+
 
     [SerializeField] private LensFlare lensFlare;
     [SerializeField] private Light _light;
@@ -40,8 +42,9 @@ public class AIMove : MonoBehaviour
             Vector3 aiPosition = new Vector3(transform.position.x, wayPoints[currentIndex].position.y, transform.position.z);
             Vector3 wayPointPosition = wayPoints[currentIndex].position;
             float distanceFromPoint = Vector3.Distance(aiPosition, wayPointPosition);
+            Debug.Log(distanceFromPoint);
 
-            if (distanceFromPoint <= 0.1f)
+            if (distanceFromPoint < 0.1f)
             {
                 //go to next 
                 Debug.Log("reached " + (currentIndex + 1));
@@ -89,7 +92,7 @@ public class AIMove : MonoBehaviour
         if (currentState != AIState.Chase)
         {
             heardPos = soundPos;
-            Debug.Log(soundPos);
+            //Debug.Log(soundPos);
             currentState = AIState.Heard;
             lensFlare.color = Color.magenta;
             _light.color = Color.magenta;
@@ -105,6 +108,8 @@ public class AIMove : MonoBehaviour
             _light.color = _baseLightColor;
         }
     }
+
+    
 
 }
 
